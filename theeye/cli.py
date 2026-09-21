@@ -1284,6 +1284,9 @@ def main(argv=None) -> int:
                     routed = "crypto"
                 elif DOMAIN_RE.match(t.split("/")[0]) and "." in t:
                     routed = "domain"
+                elif re.match(r"^[A-Za-zÀ-ÿ' \-]{3,60}$", t) and " " in t \
+                        and not re.search(r"\d", t):
+                    routed = "dossier"   # bare full name -> total research
         argv.insert(0, routed)
     elif not argv:
         argv = ["--help"]

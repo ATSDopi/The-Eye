@@ -108,9 +108,9 @@ python -m theeye email <address>      # 10+ free modules
 python -m theeye breach <address>     # consolidated leak report
 ```
 
-- **Existence checks**: Gravatar (name, bio, linked accounts), ProtonMail (+ account age via PGP keyserver), GitHub, X/Twitter, Spotify.
-- **Leak sources**: LeakCheck, XposedOrNot (+ industry/password-strength analytics), ProxyNova COMB (masked credential lines), HudsonRock (infostealer infections), Ahmia darkweb search (over Tor).
-- **`breach`** merges everything into one deduplicated timeline — the same breach seen by three sources counts once — then scores exposure from `clean` to `critical`.
+- **Existence checks**: Gravatar (name, bio, linked accounts), ProtonMail (+ account age via PGP keyserver), GitHub profile, **GitHub commits** (`author-email` search — leaks real names + repos), X/Twitter, Spotify, and an opt-in **SMTP RCPT probe** with catch-all detection (`--smtp`; often blocked on residential port 25).
+- **Leak sources**: LeakCheck, XposedOrNot (+ industry/password-strength analytics), ProxyNova COMB (masked credential lines), HudsonRock (infostealer infections), IntelX (leaks/pastes/darknet, free key), Ahmia darkweb search (over Tor). `--breach-only` runs just the leak sources.
+- **`breach`** merges everything into one deduplicated timeline — dump filenames like `Houzz.com.rar/x_3.txt [Part 132 of 1025]` normalize to the same breach — then scores exposure from `clean` to `critical`.
 
 ## Dossier — one command, total research
 
