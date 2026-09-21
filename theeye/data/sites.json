@@ -1,7 +1,16 @@
 {
  "version": 1,
- "count": 6817,
- "enabled": 6266,
+ "count": 6816,
+ "enabled": 6265,
+ "sources": [
+  "blackbird_email",
+  "maigret",
+  "nexfil",
+  "sherlock",
+  "social_analyzer",
+  "wmn"
+ ],
+ "generated": "2026-09-21",
  "sites": [
   {
    "name": "Google",
@@ -483,6 +492,7 @@
    "protection": [],
    "source": [
     "maigret",
+    "nexfil",
     "sherlock"
    ],
    "known_claimed": "Jimbo_Wales",
@@ -14713,7 +14723,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Atwiki",
+   "name": "W.Atwiki",
    "url": "https://w.atwiki.jp/{username}",
    "url_probe": null,
    "url_main": null,
@@ -14818,7 +14828,7 @@
    "m_code": 404
   },
   {
-   "name": "Iki.Secondlife",
+   "name": "Wiki.Secondlife",
    "url": "https://wiki.secondlife.com/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -22121,7 +22131,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Eclipse",
+   "name": "Wiki.Eclipse",
    "url": "https://wiki.eclipse.org/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -22149,7 +22159,7 @@
    "known_unclaimed": null
   },
   {
-   "name": "Iki.Geni",
+   "name": "Wiki.Geni",
    "url": "https://wiki.geni.com/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -25155,7 +25165,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Vtiger",
+   "name": "Wiki.Vtiger",
    "url": "https://wiki.vtiger.com/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -30133,7 +30143,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Factorio",
+   "name": "Wiki.Factorio",
    "url": "https://wiki.factorio.com/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -46331,7 +46341,7 @@
    "known_unclaimed": null
   },
   {
-   "name": "Iki.Xiph",
+   "name": "Wiki.Xiph",
    "url": "https://wiki.xiph.org/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -50536,7 +50546,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Openvz",
+   "name": "Wiki.Openvz",
    "url": "https://wiki.openvz.org/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -50667,7 +50677,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Osdev",
+   "name": "Wiki.Osdev",
    "url": "https://wiki.osdev.org/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -51261,7 +51271,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Xentax",
+   "name": "Wiki.Xentax",
    "url": "https://wiki.xentax.com/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -54290,7 +54300,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Clicklaw.Bc",
+   "name": "Wiki.Clicklaw.Bc",
    "url": "https://wiki.clicklaw.bc.ca/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -55601,7 +55611,7 @@
    "known_unclaimed": null
   },
   {
-   "name": "Iki.Hostelmanagement",
+   "name": "Wiki.Hostelmanagement",
    "url": "https://wiki.hostelmanagement.com/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -57325,7 +57335,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Ikishire.Co",
+   "name": "Wikishire.Co",
    "url": "https://wikishire.co.uk/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -58324,7 +58334,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Ikiwrimo",
+   "name": "Wikiwrimo",
    "url": "https://wikiwrimo.org/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -58655,7 +58665,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Openmw",
+   "name": "Wiki.Openmw",
    "url": "https://wiki.openmw.org/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -60384,7 +60394,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Orldwindcentral",
+   "name": "Worldwindcentral",
    "url": "https://worldwindcentral.com/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -61809,7 +61819,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Erelate",
+   "name": "Werelate",
    "url": "https://werelate.org/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -62503,7 +62513,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Edgertronic",
+   "name": "Wiki.Edgertronic",
    "url": "https://wiki.edgertronic.com/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -62648,7 +62658,7 @@
    "known_unclaimed": null
   },
   {
-   "name": "Iki.Contribs",
+   "name": "Wiki.Contribs",
    "url": "https://wiki.contribs.org/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -62948,7 +62958,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Ikipathways",
+   "name": "Wikipathways",
    "url": "https://wikipathways.org/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -63166,7 +63176,7 @@
    "known_unclaimed": null
   },
   {
-   "name": "Iki.Robojackets",
+   "name": "Wiki.Robojackets",
    "url": "https://wiki.robojackets.org/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -63193,7 +63203,7 @@
    "known_unclaimed": null
   },
   {
-   "name": "Ikiquiz",
+   "name": "Wikiquiz",
    "url": "https://wikiquiz.org/revision-notes/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -63388,7 +63398,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Urbandead",
+   "name": "Wiki.Urbandead",
    "url": "https://wiki.urbandead.com/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -63507,7 +63517,7 @@
    "known_unclaimed": null
   },
   {
-   "name": "Ikidr",
+   "name": "Wikidr",
    "url": "https://wikidr.net/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -63877,7 +63887,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Bytecode",
+   "name": "Wiki.Bytecode",
    "url": "https://wiki.bytecode.club/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -64466,7 +64476,7 @@
    "known_unclaimed": null
   },
   {
-   "name": "Ikicu",
+   "name": "Wikicu",
    "url": "https://wikicu.com/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -64523,7 +64533,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Iki.Freephile",
+   "name": "Wiki.Freephile",
    "url": "https://wiki.freephile.org/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -64550,7 +64560,7 @@
    "known_unclaimed": null
   },
   {
-   "name": "Iki.Spacesim",
+   "name": "Wiki.Spacesim",
    "url": "https://wiki.spacesim.org/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -64701,7 +64711,7 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Ikimsk",
+   "name": "Wikimsk",
    "url": "https://wikiMSK.org/wiki/User:{username}",
    "url_probe": null,
    "url_main": null,
@@ -66960,33 +66970,6 @@
    ],
    "known_claimed": "alex",
    "known_unclaimed": "noonewouldeverusethis7"
-  },
-  {
-   "name": "Ackypedia.Risteq",
-   "url": "https://wackypedia.risteq.net/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [
-    "wiki"
-   ],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "social_analyzer"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
   },
   {
    "name": "actikom.ucoz.ru",
@@ -158442,33 +158425,6 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
-   "name": "Heretosee",
-   "url": "https://wheretosee.org/wildlife/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [
-    "wiki"
-   ],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "social_analyzer"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
-  },
-  {
    "name": "heroesworld.ru",
    "url": "https://heroesworld.ru/user/{username}/",
    "url_probe": null,
@@ -161514,220 +161470,6 @@
    "m_code": 200
   },
   {
-   "name": "Iki.Lostsouls",
-   "url": "https://wiki.lostsouls.org/wiki/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [
-    "wiki"
-   ],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "social_analyzer"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
-  },
-  {
-   "name": "Iki.Shartak",
-   "url": "https://wiki.shartak.com/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [
-    "wiki"
-   ],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "social_analyzer"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
-  },
-  {
-   "name": "Iki.Therofl98",
-   "url": "https://wiki.therofl98.co/wiki/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [
-    "wiki"
-   ],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "social_analyzer"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
-  },
-  {
-   "name": "Ikidifferences",
-   "url": "https://wikidifferences.com/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [
-    "wiki"
-   ],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "social_analyzer"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
-  },
-  {
-   "name": "Ikifarming",
-   "url": "https://wikifarming.org/wiki/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [
-    "wiki"
-   ],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "social_analyzer"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
-  },
-  {
-   "name": "ikipedia",
-   "url": "https://www.wikipedia.org/wiki/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "nexfil"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
-  },
-  {
-   "name": "Ikipediaquality",
-   "url": "https://wikipediaquality.com/wiki/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [
-    "wiki"
-   ],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "social_analyzer"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
-  },
-  {
-   "name": "Ikipunch",
-   "url": "https://wikipunch.com/wiki/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [
-    "wiki"
-   ],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "social_analyzer"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
-  },
-  {
    "name": "Iknifecollector",
    "url": "https://iknifecollector.com/profiles/profile/show?id={username}",
    "url_probe": null,
@@ -163645,33 +163387,6 @@
    ],
    "known_claimed": "Mihho",
    "known_unclaimed": "noonewouldeverusethis7"
-  },
-  {
-   "name": "Ithoutvowels",
-   "url": "https://withoutvowels.org/wiki/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [
-    "wiki"
-   ],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "social_analyzer"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
   },
   {
    "name": "itsfoss.community",
@@ -189512,31 +189227,6 @@
    "known_unclaimed": null
   },
   {
-   "name": "orldtruth",
-   "url": "https://www.worldtruth.online/{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "nexfil"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
-  },
-  {
    "name": "ortschroniken-mv.de",
    "url": "https://ortschroniken-mv.de/index.php/User:{username}",
    "url_probe": "https://ortschroniken-mv.de/api.php?action=query&list=users&ususers={username}&usprop=editcount|registration|groups|gender&format=json",
@@ -190207,33 +189897,6 @@
    ],
    "known_claimed": "StopAdMedia",
    "known_unclaimed": "noonewouldeverusethis7"
-  },
-  {
-   "name": "Owpedia",
-   "url": "https://wowpedia.org/User:{username}",
-   "url_probe": null,
-   "url_main": null,
-   "check_type": "status_code",
-   "presence_strs": [],
-   "absence_strs": [],
-   "error_url": null,
-   "regex_check": null,
-   "head_only": false,
-   "ignore_403": false,
-   "method": "GET",
-   "headers": {},
-   "tags": [
-    "wiki"
-   ],
-   "nsfw": false,
-   "rank": null,
-   "disabled": false,
-   "protection": [],
-   "source": [
-    "social_analyzer"
-   ],
-   "known_claimed": null,
-   "known_unclaimed": null
   },
   {
    "name": "oyunlabi.com",
@@ -224846,6 +224509,33 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
+   "name": "Wackypedia.Risteq",
+   "url": "https://wackypedia.risteq.net/User:{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [
+    "wiki"
+   ],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "social_analyzer"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
+  },
+  {
    "name": "wahoox.forum.wahoofitness.com",
    "url": "https://wahoox.forum.wahoofitness.com/u/{username}",
    "url_probe": "https://wahoox.forum.wahoofitness.com/u/{username}.json",
@@ -226340,6 +226030,33 @@
    ],
    "known_claimed": "dimok",
    "known_unclaimed": "noonewouldeverusethis7"
+  },
+  {
+   "name": "Wheretosee",
+   "url": "https://wheretosee.org/wildlife/User:{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [
+    "wiki"
+   ],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "social_analyzer"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
   },
   {
    "name": "Whonix Forum",
@@ -230385,6 +230102,33 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
+   "name": "Wiki.Lostsouls",
+   "url": "https://wiki.lostsouls.org/wiki/User:{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [
+    "wiki"
+   ],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "social_analyzer"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
+  },
+  {
    "name": "wiki.lstsim.de",
    "url": "https://wiki.lstsim.de/User:{username}",
    "url_probe": "https://wiki.lstsim.de/api.php?action=query&list=users&ususers={username}&usprop=editcount|registration|groups|gender&format=json",
@@ -231477,6 +231221,33 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
+   "name": "Wiki.Shartak",
+   "url": "https://wiki.shartak.com/User:{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [
+    "wiki"
+   ],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "social_analyzer"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
+  },
+  {
    "name": "wiki.slavicin.unart.cz",
    "url": "https://wiki.slavicin.unart.cz/index.php/User:{username}",
    "url_probe": "https://wiki.slavicin.unart.cz/api.php?action=query&list=users&ususers={username}&usprop=editcount|registration|groups|gender&format=json",
@@ -231888,6 +231659,33 @@
    ],
    "known_claimed": "Aland",
    "known_unclaimed": "noonewouldeverusethis7"
+  },
+  {
+   "name": "Wiki.Therofl98",
+   "url": "https://wiki.therofl98.co/wiki/User:{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [
+    "wiki"
+   ],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "social_analyzer"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
   },
   {
    "name": "wiki.travellerrpg.com",
@@ -232506,6 +232304,33 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
+   "name": "Wikidifferences",
+   "url": "https://wikidifferences.com/User:{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [
+    "wiki"
+   ],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "social_analyzer"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
+  },
+  {
    "name": "wikifab.org",
    "url": "https://wikifab.org/wiki/User:{username}",
    "url_probe": "https://wikifab.org/w/api.php?action=query&list=users&ususers={username}&usprop=editcount|registration|groups|gender&format=json",
@@ -232538,6 +232363,33 @@
    ],
    "known_claimed": "B.mobilier",
    "known_unclaimed": "noonewouldeverusethis7"
+  },
+  {
+   "name": "Wikifarming",
+   "url": "https://wikifarming.org/wiki/User:{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [
+    "wiki"
+   ],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "social_analyzer"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
   },
   {
    "name": "wikihaj.com",
@@ -232916,6 +232768,60 @@
    ],
    "known_claimed": "Minions 2015",
    "known_unclaimed": "noonewouldeverusethis7"
+  },
+  {
+   "name": "Wikipediaquality",
+   "url": "https://wikipediaquality.com/wiki/User:{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [
+    "wiki"
+   ],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "social_analyzer"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
+  },
+  {
+   "name": "Wikipunch",
+   "url": "https://wikipunch.com/wiki/User:{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [
+    "wiki"
+   ],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "social_analyzer"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
   },
   {
    "name": "wikirby.com",
@@ -233317,6 +233223,33 @@
    ],
    "known_claimed": "charles_clark",
    "known_unclaimed": "noonewouldeverusethis7"
+  },
+  {
+   "name": "Withoutvowels",
+   "url": "https://withoutvowels.org/wiki/User:{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [
+    "wiki"
+   ],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "social_analyzer"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
   },
   {
    "name": "Wittyprofiles",
@@ -233863,6 +233796,31 @@
    "known_unclaimed": "noonewouldeverusethis7"
   },
   {
+   "name": "worldtruth",
+   "url": "https://www.worldtruth.online/{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "nexfil"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
+  },
+  {
    "name": "WorlfOfTanksForum",
    "url": "https://forum.wotanks.com/member.php/?username={username}",
    "url_probe": null,
@@ -234039,6 +233997,33 @@
    ],
    "known_claimed": "alex",
    "known_unclaimed": "noonewouldeverusethis7"
+  },
+  {
+   "name": "Wowpedia",
+   "url": "https://wowpedia.org/User:{username}",
+   "url_probe": null,
+   "url_main": null,
+   "check_type": "status_code",
+   "presence_strs": [],
+   "absence_strs": [],
+   "error_url": null,
+   "regex_check": null,
+   "head_only": false,
+   "ignore_403": false,
+   "method": "GET",
+   "headers": {},
+   "tags": [
+    "wiki"
+   ],
+   "nsfw": false,
+   "rank": null,
+   "disabled": false,
+   "protection": [],
+   "source": [
+    "social_analyzer"
+   ],
+   "known_claimed": null,
+   "known_unclaimed": null
   },
   {
    "name": "wox.cc",

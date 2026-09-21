@@ -8,7 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org)
-[![Sites](https://img.shields.io/badge/Sites-6817-2ea44f.svg)](#the-site-database)
+[![Sites](https://img.shields.io/badge/Sites-6816-2ea44f.svg)](#the-site-database)
 [![API keys required](https://img.shields.io/badge/API%20keys-none%20required-orange.svg)](#optional-free-api-key)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%C2%B7%20Linux%20%C2%B7%20macOS-lightgrey.svg)](#install)
 
@@ -132,7 +132,7 @@ INTELX_KEY=your-free-key   # get one at https://free.intelx.io
 
 ## The site database
 
-The bundled `sites.json` merges **Maigret** (6 121), **Social-Analyzer** (999), **WhatsMyName** (717), **Sherlock** (482) and **Nexfil** (328), deduplicated by host+path into 6 817 entries — including generic engine support (Discourse, XenForo, MediaWiki, Mastodon, Lemmy, Gitea, phpBB…).
+The bundled `sites.json` merges **Maigret** (6 121), **Social-Analyzer** (999), **WhatsMyName** (717), **Sherlock** (482) and **Nexfil** (328), deduplicated by host+path into 6 816 entries — including generic engine support (Discourse, XenForo, MediaWiki, Mastodon, Lemmy, Gitea, phpBB…).
 
 ```bash
 python -m theeye sites --stats        # database overview

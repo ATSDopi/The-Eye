@@ -34,6 +34,7 @@ import json
 import re
 import sys
 import urllib.request
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -58,17 +59,24 @@ NSFW_TAGS = {
 
 
 def fetch(url: str, dest: Path) -> dict:
+    """Download a dataset; on network failure fall back to the cached copy."""
     print(f"  GET {url}")
     req = urllib.request.Request(url, headers={"User-Agent": "theeye-db-updater"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        data = r.read()
-    dest.write_bytes(data)
-    return json.loads(data.decode("utf-8"))
+    try:
+        with urllib.request.urlopen(req, timeout=120) as r:
+            data = r.read()
+        dest.write_bytes(data)
+        return json.loads(data.decode("utf-8"))
+    except Exception as e:
+        if dest.exists():
+            print(f"    failed ({type(e).__name__}) — using cached copy")
+            return json.loads(dest.read_text(encoding="utf-8"))
+        raise RuntimeError(f"source {url} failed and no cache: {e}") from e
 
 
 def host_of(url: str) -> str:
     m = re.search(r"https?://([^/]+)", url or "")
-    return m.group(1).lower().lstrip("www.") if m else ""
+    return re.sub(r"^www\d*\.", "", m.group(1).lower()) if m else ""
 
 
 def path_of(url: str) -> str:
@@ -286,13 +294,19 @@ def norm_blackbird_email(raw: dict) -> list[dict]:
     out = []
     for s in raw.get("sites", []):
         uri = (s.get("uri_check") or "").replace("{account}", "{email}")
-        if "{email}" not in uri:
+        data = (s.get("data") or "").replace("{account}", "{email}")
+        # the email may live in the URI (GET) or the POST body
+        if "{email}" not in uri and "{email}" not in data:
+            continue
+        # can't generically solve multi-step flows (CSRF pre-fetch etc.)
+        if "{csrftoken_value}" in json.dumps(s.get("headers") or {}):
             continue
         out.append({
             "name": s.get("name") or host_of(uri),
             "uri_check": uri,
             "method": (s.get("method") or "GET").upper(),
             "headers": s.get("headers") or {},
+            "data": data or None,
             "e_code": s.get("e_code"), "e_string": s.get("e_string"),
             "m_code": s.get("m_code"), "m_string": s.get("m_string"),
             "cat": s.get("cat"),
@@ -351,12 +365,16 @@ def main() -> None:
 
     enabled = [s for s in merged if not s["disabled"]]
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({
+    tmp_out = OUT.with_suffix(".json.tmp")
+    tmp_out.write_text(json.dumps({
         "version": 1,
         "count": len(merged),
         "enabled": len(enabled),
+        "sources": sorted(SOURCES),
+        "generated": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         "sites": merged,
     }, ensure_ascii=False, indent=1), encoding="utf-8")
+    tmp_out.replace(OUT)  # atomic-ish: never leave a half-written DB
 
     multi = sum(1 for s in merged if len(s["source"]) > 1)
     print(f"\nDone: {len(merged)} sites ({len(enabled)} enabled, {multi} merged from >1 source)")

@@ -16,7 +16,7 @@ from rich.panel import Panel
 from rich.text import Text
 
 from .models import Status, ScanReport, SiteResult
-from .sitesdb import load_sites, filter_sites, all_tags
+from .sitesdb import load_sites, filter_sites, all_tags, db_age_days
 from .engine import Scanner
 from .enrich import Enricher, avatar_pivots
 from .variants import generate
@@ -221,6 +221,11 @@ async def run_scan(args) -> int:
     if not sites:
         ERR.print("[red]No sites match the filters.[/red]")
         return 1
+
+    age = db_age_days()
+    if age is not None and age > 90:
+        console.print(f"[yellow]site database is {age} days old — "
+                      f"run `theeye update`[/yellow]")
 
     queries = [args.username]
     variant_sites: set[int] = set()

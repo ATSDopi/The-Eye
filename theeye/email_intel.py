@@ -382,7 +382,10 @@ async def check_registration(client: httpx.AsyncClient, email: str) -> SiteResul
         url = e["uri_check"].replace("{email}", val)
         try:
             if (e.get("method") or "GET") == "POST":
-                resp = await client.post(url, headers={**UA, **(e.get("headers") or {})}, timeout=12)
+                body_data = (e.get("data") or "").replace("{email}", val) or None
+                resp = await client.post(
+                    url, content=body_data,
+                    headers={**UA, **(e.get("headers") or {})}, timeout=12)
             else:
                 resp = await client.get(url, headers={**UA, **(e.get("headers") or {})}, timeout=12)
         except Exception:
