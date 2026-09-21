@@ -24,6 +24,7 @@ echo    [6] Phone intel     (parse + leaks)
 echo    [7] Address intel   (geocoding OSM + BAN)
 echo    [8] Crypto intel    (btc/eth/ltc/doge/sol/xmr)
 echo    [9] DOSSIER         (TOTAL RESEARCH: cross everything)
+echo    [d] Doxx report     (structured investigation report)
 echo    [h] History         (past scans)
 echo    [b] Site database   (stats / tags)
 echo    [s] Site selfcheck  (flag FP-prone sites)
@@ -41,6 +42,7 @@ if "%CHOICE%"=="6" goto phone
 if "%CHOICE%"=="7" goto address
 if "%CHOICE%"=="8" goto crypto
 if "%CHOICE%"=="9" goto dossier
+if /i "%CHOICE%"=="d" goto doxx
 if /i "%CHOICE%"=="h" goto history
 if /i "%CHOICE%"=="b" goto sites
 if /i "%CHOICE%"=="s" goto selfcheck
@@ -131,12 +133,27 @@ goto menu
 
 :dossier
 echo.
-echo    tip: combine fields from the shell, e.g.
-echo    python -m theeye dossier --first Jean --last Dupont --email x@y.z --crypto 0x...
+echo    leave empty = interactive mode (asks every field one by one)
+echo    or give one target: email / domain / ip / phone / crypto / username
 echo.
-set /p T="  target (email / domain / ip / phone / address / crypto / username): "
-if "%T%"=="" goto menu
-python -m theeye dossier "%T%" --html
+set /p T="  target [empty = interactive]: "
+if "%T%"=="" (
+    python -m theeye dossier --html
+) else (
+    python -m theeye dossier "%T%" --html
+)
+echo.
+pause
+goto menu
+
+:doxx
+echo.
+echo    report creator: answer what you know, empty = skipped
+echo    presets: full / identity / digital / network / minimal
+echo.
+set /p PRE="  preset [full]: "
+if "%PRE%"=="" set PRE=full
+python -m theeye doxx --preset %PRE% --html
 echo.
 pause
 goto menu

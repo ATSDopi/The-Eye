@@ -41,7 +41,8 @@ What makes it different from the tools it was inspired by:
 | `phone` | phone number | Validity, region, carrier, line type + leak coverage |
 | `address` | postal address | OSM/Nominatim geocoding + official French BAN match |
 | `crypto` | wallet address | Chain auto-detect (BTC/ETH/LTC/DOGE/SOL/XMR), balance + tokens via public explorers |
-| `dossier` | **anything** | Auto-detects the input and chains every relevant module + identity graph |
+| `dossier` | **anything** | Auto-detects input, chains every module + identity graph. Bare `dossier` = interactive wizard (asks each field, empty = skipped, comma = multiple) |
+| `doxx` | — | Report creator: guided entry of everything known about a subject, preset sections (`full`/`identity`/`digital`/`network`/`minimal`), optional `--investigate` runs the dossier first, exports HTML+JSON |
 
 ## Install
 
@@ -118,6 +119,8 @@ python -m theeye breach <address>     # consolidated leak report
 python -m theeye dossier <anything>                          # auto-detect input type
 python -m theeye dossier --first Jean --last Dupont          # generates username candidates
 python -m theeye dossier --email a@b.c --username jd --phone +33… --crypto 0x…
+python -m theeye dossier                                     # interactive: asks field by field
+python -m theeye doxx --preset full --investigate            # report creator + auto-investigation
 ```
 
 `dossier` runs every relevant suite, scans generated username candidates on top sites, **permutates email addresses** (first+last → `j.dupont@`, `jd@`… tested against leak sources — a hit proves the address exists), cross-checks avatar hashes between profiles and Gravatar, and finishes with an **identity graph**: usernames, names, emails, phones, addresses, wallets, accounts and profile URLs — all correlated in one table (or one `--html` page).

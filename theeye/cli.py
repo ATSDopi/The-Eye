@@ -200,6 +200,29 @@ def build_parser() -> argparse.ArgumentParser:
     do.add_argument("--html", metavar="FILE", nargs="?", const="AUTO")
     do.add_argument("--no-save", action="store_true")
 
+    dx = sub.add_parser("doxx",
+                        help="report creator — enter what you know, get a "
+                             "structured report (interactive by default)")
+    dx.add_argument("--preset", default="full",
+                    choices=["full", "identity", "digital", "network",
+                             "minimal"],
+                    help="which field sections to fill (default: full)")
+    dx.add_argument("--investigate", action="store_true",
+                    help="also run the dossier investigation on supplied data")
+    dx.add_argument("--html", metavar="FILE", nargs="?", const="AUTO")
+    dx.add_argument("--non-interactive", action="store_true",
+                    help="don't prompt — use only the --field flags")
+    dx.add_argument("--case", default="default")
+    dx.add_argument("--proxy"); dx.add_argument("--timeout", type=float,
+                                              default=15.0)
+    dx.add_argument("--top", type=int, default=150)
+    for f in ("title", "investigator", "classification", "first", "middle",
+              "last", "aliases", "dob", "nationality", "occupation",
+              "usernames", "emails", "phones", "profiles", "domains", "ips",
+              "crypto", "addresses", "city", "country", "associates",
+              "vehicles", "notes"):
+        dx.add_argument(f"--{f}")
+
     sub.add_parser("update", help="refresh the site database from upstream")
     return p
 
@@ -822,6 +845,25 @@ async def run_dossier(args) -> int:
         first, last = (parts[0], " ".join(parts[1:])) if len(parts) > 1 \
             else (parts[0], "")
 
+    # interactive mode: bare `theeye dossier` -> ask every field, blank = skip
+    if not args.target and not any(fields.values()) and not (first or last):
+        from rich.prompt import Prompt
+        console.print("[bold]Interactive dossier[/bold] — "
+                      "empty field = skipped · comma = multiple values")
+        first = Prompt.ask("  first name", default="").strip()
+        last = Prompt.ask("  last name", default="").strip()
+        for k, label in [("username", "username(s)"),
+                         ("email", "email(s)"), ("phone", "phone(s)"),
+                         ("domain", "domain(s)"), ("ip", "IP(s)"),
+                         ("address", "postal address"),
+                         ("crypto", "crypto wallet(s)")]:
+            v = Prompt.ask(f"  {label}", default="").strip()
+            if v:
+                fields[k] = v
+        if not any(fields.values()) and not (first or last):
+            ERR.print("[red]nothing supplied — aborting[/red]")
+            return 1
+
     # positional target auto-detection
     t = (args.target or "").strip()
     if t:
@@ -872,9 +914,19 @@ async def run_dossier(args) -> int:
                 "profiles": set()}
     avatar_pool = []          # results with avatars — cross-suite hash match
 
+    # comma-separated input = multiple targets of the same kind
+    usernames = [u for u in re.split(r"[,\s]+", fields["username"] or "")
+                 if u]
+    emails = [e for e in re.split(r"[,\s]+", fields["email"] or "") if e]
+    fields["username"] = usernames[0] if usernames else None
+    fields["email"] = emails[0] if emails else None
+
     # ---------- username matrix (given + generated from name/email) ----------
     cands = _username_candidates(first, last, fields["email"],
                                  fields["username"])
+    for u in usernames[1:]:
+        if u.lower() not in {c.lower() for c in cands}:
+            cands.insert(0, u)
     if cands:
         console.print(f"[bold]username matrix:[/bold] {', '.join(cands)} "
                       f"× top {args.top} sites")
@@ -953,17 +1005,18 @@ async def run_dossier(args) -> int:
         if not args.no_save:
             db.save_scan(report, args.case)
 
-    # ---------- email ----------
-    if fields["email"]:
-        console.print("[bold]email suite[/bold]")
-        rep = await run_email(ns_for("email", fields["email"]))
-        await run_breach(ns_for("breach", fields["email"]))
-        identity["emails"].add(fields["email"])
+    # ---------- email ---------- (every supplied address)
+    for email_addr in emails:
+        console.print(f"[bold]email suite[/bold] — {email_addr}")
+        rep = await run_email(ns_for("email", email_addr))
+        await run_breach(ns_for("breach", email_addr))
+        identity["emails"].add(email_addr)
         if isinstance(rep, ScanReport):
             for r in rep.results:
                 if r.status != Status.FOUND:
                     continue
-                if r.site in ("twitter", "spotify", "protonmail", "github"):
+                if r.site in ("twitter", "spotify", "protonmail", "github",
+                              "registration"):
                     identity["accounts_registered"].add(
                         f"{r.site}: {r.reason}")
                 d = r.enriched or {}
@@ -982,8 +1035,8 @@ async def run_dossier(args) -> int:
                             d.get("display_name") or d.get("name"))
                     if d.get("avatar"):
                         avatar_pool.append(r)
-        if DOMAIN_RE.match(fields["email"].split("@")[1]):
-            dom = fields["email"].split("@")[1]
+        if DOMAIN_RE.match(email_addr.split("@")[1]):
+            dom = email_addr.split("@")[1]
             identity["domains"].add(dom)
             if dom not in ("gmail.com", "yahoo.com", "outlook.com",
                            "hotmail.com", "proton.me", "icloud.com",
@@ -1012,11 +1065,13 @@ async def run_dossier(args) -> int:
                 console.print(f"  [green]✓[/green] {e} — found in breach "
                               f"data via {srcs}")
 
-    # ---------- phone ----------
-    if fields["phone"]:
-        console.print("[bold]phone suite[/bold]")
-        rep = await run_phone(ns_for("phone", fields["phone"]))
-        identity["phones"].add(fields["phone"])
+    # ---------- phone / domain / ip / crypto (comma-separated ok) ----------
+    for phone in re.split(r"[,\s]+", fields["phone"] or ""):
+        if not phone:
+            continue
+        console.print(f"[bold]phone suite[/bold] — {phone}")
+        rep = await run_phone(ns_for("phone", phone))
+        identity["phones"].add(phone)
         if isinstance(rep, ScanReport):
             for r in rep.results:
                 if r.status == Status.FOUND and r.site in ("leakcheck",
@@ -1025,18 +1080,23 @@ async def run_dossier(args) -> int:
                     identity["accounts_registered"].add(
                         f"leak({r.site}): {r.reason}")
 
-    # ---------- domain / ip / address / crypto ----------
-    if fields["domain"]:
-        console.print("[bold]domain suite[/bold]")
-        await run_domain(ns_for("domain", fields["domain"]))
-        identity["domains"].add(fields["domain"])
-    if fields["ip"]:
-        console.print("[bold]ip suite[/bold]")
-        await run_ip(ns_for("ip", fields["ip"]))
-    if fields["crypto"]:
-        console.print("[bold]crypto suite[/bold]")
-        rep = await run_crypto(ns_for("crypto", fields["crypto"]))
-        identity["crypto"].add(fields["crypto"])
+    for dom in re.split(r"[,\s]+", fields["domain"] or ""):
+        if not dom:
+            continue
+        console.print(f"[bold]domain suite[/bold] — {dom}")
+        await run_domain(ns_for("domain", dom))
+        identity["domains"].add(dom)
+    for ip in re.split(r"[,\s]+", fields["ip"] or ""):
+        if not ip:
+            continue
+        console.print(f"[bold]ip suite[/bold] — {ip}")
+        await run_ip(ns_for("ip", ip))
+    for wallet in re.split(r"[,\s]+", fields["crypto"] or ""):
+        if not wallet:
+            continue
+        console.print(f"[bold]crypto suite[/bold] — {wallet}")
+        rep = await run_crypto(ns_for("crypto", wallet))
+        identity["crypto"].add(wallet)
         if isinstance(rep, ScanReport):
             for r in rep.results:
                 if r.status == Status.FOUND and r.site != "detect":
@@ -1098,6 +1158,72 @@ async def run_dossier(args) -> int:
         Path(path).write_text(render_dossier_html(fields, first, last,
                                                  identity), encoding="utf-8")
         console.print(f"[dim]dossier html -> {path}[/dim]")
+    if getattr(args, "_doxx", False):
+        return {"identity": identity}
+    return 0
+
+
+async def run_doxx(args) -> int:
+    """Report creator — collect known facts (interactive or flags), optionally
+    run the dossier on them, then write a structured HTML+JSON report."""
+    from . import doxx as dx
+    from rich.prompt import Confirm
+
+    if args.non_interactive:
+        data = dx.collect_from_args(args)
+    else:
+        console.print(Panel("[bold]Doxx — report creator[/bold]\n"
+                            "every field is optional, empty = skipped",
+                            border_style="red", expand=False))
+        data = dx.collect_from_args(args)
+        prompted = dx.collect_interactive(console, args.preset)
+        for k, v in prompted.items():          # interactive fills gaps
+            data.setdefault(k, v)
+
+    if not data:
+        ERR.print("[red]nothing supplied — aborting[/red]")
+        return 1
+
+    # preview
+    t = Table(title="Collected facts", title_justify="left",
+              border_style="cyan", header_style="bold")
+    t.add_column("Field", style="bold", no_wrap=True)
+    t.add_column("Value(s)", overflow="fold", max_width=80)
+    for k, vals in data.items():
+        t.add_row(k, " · ".join(str(v) for v in vals))
+    console.print(t)
+
+    identity = None
+    dargs = dx.dossier_args(data)
+    has_target = any([dargs["first"], dargs["last"], dargs["username"],
+                      dargs["email"], dargs["phone"], dargs["domain"],
+                      dargs["ip"], dargs["address"], dargs["crypto"]])
+    investigate = args.investigate or (
+        not args.non_interactive and has_target and
+        Confirm.ask("[bold]Run full dossier investigation on this data?[/bold]",
+                    default=True))
+    if investigate and has_target:
+        argv = ["dossier"]
+        for flag, key in [("--first", "first"), ("--last", "last"),
+                          ("--username", "username"), ("--email", "email"),
+                          ("--phone", "phone"), ("--domain", "domain"),
+                          ("--ip", "ip"), ("--address", "address"),
+                          ("--crypto", "crypto")]:
+            if dargs[key]:
+                argv += [flag, dargs[key]]
+        ns = build_parser().parse_args(argv)
+        ns.case, ns.proxy, ns.timeout = args.case, args.proxy, args.timeout
+        ns.top, ns.html, ns.no_save = args.top, None, True
+        ns._doxx = True                       # ask for the graph back
+        rc = await run_dossier(ns)
+        if isinstance(rc, dict):               # dossier returns its graph
+            identity = rc.get("identity")
+
+    jpath, hpath = dx.save_doxx(
+        data, args.preset, identity,
+        None if args.html == "AUTO" or args.html is None else args.html)
+    console.print(f"[green]report saved[/green] — {hpath}")
+    console.print(f"[dim]json -> {jpath}[/dim]")
     return 0
 
 
@@ -1315,8 +1441,8 @@ async def run_selfcheck(args) -> int:
 def main(argv=None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     known = {"scan", "email", "domain", "breach", "ip", "phone", "address",
-             "crypto", "dossier", "selfcheck", "sites", "history", "report",
-             "update", "-h", "--help"}
+             "crypto", "dossier", "doxx", "selfcheck", "sites", "history",
+             "report", "update", "-h", "--help"}
     if argv and argv[0] not in known and not argv[0].startswith("-"):
         # auto-route bare values to the right suite
         t = argv[0]
@@ -1403,6 +1529,12 @@ def main(argv=None) -> int:
     if args.cmd == "dossier":
         try:
             return asyncio.run(run_dossier(args))
+        except KeyboardInterrupt:
+            ERR.print("\n[yellow]interrupted[/yellow]")
+            return 130
+    if args.cmd == "doxx":
+        try:
+            return asyncio.run(run_doxx(args))
         except KeyboardInterrupt:
             ERR.print("\n[yellow]interrupted[/yellow]")
             return 130
