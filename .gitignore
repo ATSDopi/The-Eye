@@ -3,4 +3,5 @@ theeye.db
 reports/
 __pycache__/
 theeye/data/site_health.json
+theeye/data/disposable.txt
 .tmp/

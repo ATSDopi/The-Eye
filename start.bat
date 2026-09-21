@@ -131,8 +131,8 @@ goto menu
 
 :dossier
 echo.
-echo    tip: you can combine fields from the shell, e.g.
-echo    python -m theeye dossier --first Jean --last Dupont --email x@y.z
+echo    tip: combine fields from the shell, e.g.
+echo    python -m theeye dossier --first Jean --last Dupont --email x@y.z --crypto 0x...
 echo.
 set /p T="  target (email / domain / ip / phone / address / crypto / username): "
 if "%T%"=="" goto menu

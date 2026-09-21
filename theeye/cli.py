@@ -936,6 +936,13 @@ async def run_dossier(args) -> int:
                 if r.site in ("twitter", "spotify", "protonmail", "github"):
                     identity["accounts_registered"].add(
                         f"{r.site}: {r.reason}")
+                d = r.enriched or {}
+                if r.site == "github" and d.get("login"):
+                    identity["usernames"].add(d["login"])
+                if r.site == "gh_commits":
+                    identity["names"].update(d.get("authors", []))
+                    identity["profiles"].update(
+                        f"github repo: {x}" for x in d.get("repos", []))
                 if r.site == "gravatar":
                     d = r.enriched or {}
                     if d.get("username"):
