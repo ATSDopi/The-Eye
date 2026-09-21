@@ -1,5 +1,7 @@
 # The Eye — AGENTS.md
 
+Repo: https://github.com/ATSDopi/The-Eye (public, MIT)
+
 ## What
 
 Free self-hosted OSINT tool. First module: a username scanner ("Sherlock on
