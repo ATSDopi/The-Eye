@@ -1,0 +1,6 @@
+.env
+theeye.db
+reports/
+__pycache__/
+theeye/data/site_health.json
+.tmp/
