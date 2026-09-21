@@ -1,0 +1,110 @@
+[
+ {
+  "name": "Gravatar",
+  "uri_check": "https://gravatar.com/{email}.json",
+  "method": "GET",
+  "headers": {},
+  "e_code": 200,
+  "e_string": "displayName",
+  "m_code": 404,
+  "m_string": "User not found",
+  "cat": "images",
+  "input_operation": "hash-sha256"
+ },
+ {
+  "name": "Duolingo",
+  "uri_check": "https://www.duolingo.com/2017-06-30/users?email={email}",
+  "method": "GET",
+  "headers": {},
+  "e_code": 200,
+  "e_string": "username",
+  "m_code": 404,
+  "m_string": "{\"users\":[]}",
+  "cat": "hobby",
+  "input_operation": null
+ },
+ {
+  "name": "Chess.com",
+  "uri_check": "https://www.chess.com/callback/email/available?email={email}",
+  "method": "GET",
+  "headers": {},
+  "e_code": 226,
+  "e_string": "Email In Use",
+  "m_code": 404,
+  "m_string": "Email Available",
+  "cat": "gaming",
+  "input_operation": null
+ },
+ {
+  "name": "Spotify",
+  "uri_check": "https://spclient.wg.spotify.com/signup/public/v1/account?validate=1&email={email}",
+  "method": "GET",
+  "headers": {},
+  "e_code": 200,
+  "e_string": "\"status\":20",
+  "m_code": 404,
+  "m_string": "\"status\":1",
+  "cat": "music",
+  "input_operation": null
+ },
+ {
+  "name": "Strava",
+  "uri_check": "https://www.strava.com/athletes/email_unique?email={email}",
+  "method": "GET",
+  "headers": {},
+  "e_code": 200,
+  "e_string": "false",
+  "m_code": 404,
+  "m_string": "true",
+  "cat": "music",
+  "input_operation": null
+ },
+ {
+  "name": "Twitter",
+  "uri_check": "https://api.twitter.com/i/users/email_available.json?email={email}",
+  "method": "GET",
+  "headers": {},
+  "e_code": 200,
+  "e_string": "\"taken\":true",
+  "m_code": 404,
+  "m_string": "\"taken\":false",
+  "cat": "music",
+  "input_operation": null
+ },
+ {
+  "name": "NetShoes",
+  "uri_check": "https://www.netshoes.com.br/auth/account/exists/{email}",
+  "method": "GET",
+  "headers": {},
+  "e_code": 200,
+  "e_string": "\"exists\":true",
+  "m_code": 404,
+  "m_string": "\"email\"",
+  "cat": "shopping",
+  "input_operation": null
+ },
+ {
+  "name": "Xvideos",
+  "uri_check": "https://www.xvideos.com/account/checkemail?email={email}",
+  "method": "POST",
+  "headers": {},
+  "e_code": 200,
+  "e_string": "\"result\":false",
+  "m_code": 404,
+  "m_string": "\"result\":true",
+  "cat": "xx NSFW xx",
+  "input_operation": null
+ },
+ {
+  "name": "Picsart",
+  "uri_check": "https://api.picsart.com/users/email/existence?email_encoded=0&emails={email}",
+  "method": "GET",
+  "headers": {},
+  "e_code": 200,
+  "e_string": "\"response\":[\"",
+  "m_code": 404,
+  "m_string": "\"registration_flow\"",
+  "cat": "art",
+  "input_operation": null
+ }
+]

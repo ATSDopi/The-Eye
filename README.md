@@ -4,11 +4,11 @@
 
 **Free, self-hosted OSINT toolkit — find where a username, email, domain, IP, phone or wallet leaves traces online.**
 
-6 400+ sites scanned · Zero paid APIs · Zero accounts · 100% open source
+6 800+ sites scanned · Zero paid APIs · Zero accounts · 100% open source
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org)
-[![Sites](https://img.shields.io/badge/Sites-6406-2ea44f.svg)](#the-site-database)
+[![Sites](https://img.shields.io/badge/Sites-6817-2ea44f.svg)](#the-site-database)
 [![API keys required](https://img.shields.io/badge/API%20keys-none%20required-orange.svg)](#optional-free-api-key)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%C2%B7%20Linux%20%C2%B7%20macOS-lightgrey.svg)](#install)
 
@@ -20,7 +20,7 @@
 
 The Eye is an all-in-one OSINT (Open Source Intelligence) reconnaissance tool that runs entirely on your machine, for free. Point it at **one piece of information** — a username, an email, a domain, a phone number, an IP, a postal address or a crypto wallet — and it cross-references it against dozens of public sources to build a complete picture.
 
-Its flagship module is a username scanner often described as *"Sherlock on steroids"*: it merges the three biggest open site databases (**Maigret**, **WhatsMyName**, **Sherlock**) into a single deduplicated list of **6 400+ sites**, then checks them all asynchronously in seconds.
+Its flagship module is a username scanner often described as *"Sherlock on steroids"*: it merges the five biggest open site databases (**Maigret**, **WhatsMyName**, **Sherlock**, **Social-Analyzer**, **Nexfil**) into a single deduplicated list of **6 800+ sites**, then checks them all asynchronously in seconds.
 
 What makes it different from the tools it was inspired by:
 
@@ -33,7 +33,7 @@ What makes it different from the tools it was inspired by:
 
 | Command | Input | What you get |
 |---|---|---|
-| `scan` | username | Accounts found across 6 400+ sites, with confidence + FP verification |
+| `scan` | username | Accounts found across 6 800+ sites, with confidence + FP verification |
 | `email` | email address | Gravatar profile, ProtonMail/GitHub/Twitter/Spotify registration, 5 leak sources |
 | `breach` | email address | Deduplicated breach timeline + exposure score (clean → critical) |
 | `domain` | domain | DNS, RDAP registration, subdomains, urlscan, Wayback, SPF/DMARC, ransomware-victim check |
@@ -108,7 +108,7 @@ python -m theeye email <address>      # 10+ free modules
 python -m theeye breach <address>     # consolidated leak report
 ```
 
-- **Existence checks**: Gravatar (name, bio, linked accounts), ProtonMail (+ account age via PGP keyserver), GitHub profile, **GitHub commits** (`author-email` search — leaks real names + repos), X/Twitter, Spotify, and an opt-in **SMTP RCPT probe** with catch-all detection (`--smtp`; often blocked on residential port 25).
+- **Existence checks**: Gravatar (name, bio, linked accounts), ProtonMail (+ account age via PGP keyserver), GitHub profile, **GitHub commits** (`author-email` search — leaks real names + repos), X/Twitter, Spotify, a **generic registration module** driven by Blackbird's email dataset (each check declares its own endpoint/detection — extensible without code), and an opt-in **SMTP RCPT probe** with catch-all detection (`--smtp`; often blocked on residential port 25).
 - **Leak sources**: LeakCheck, XposedOrNot (+ industry/password-strength analytics), ProxyNova COMB (masked credential lines), HudsonRock (infostealer infections), IntelX (leaks/pastes/darknet, free key), Ahmia darkweb search (over Tor). `--breach-only` runs just the leak sources.
 - **`breach`** merges everything into one deduplicated timeline — dump filenames like `Houzz.com.rar/x_3.txt [Part 132 of 1025]` normalize to the same breach — then scores exposure from `clean` to `critical`.
 
@@ -120,7 +120,7 @@ python -m theeye dossier --first Jean --last Dupont          # generates usernam
 python -m theeye dossier --email a@b.c --username jd --phone +33… --crypto 0x…
 ```
 
-`dossier` runs every relevant suite, scans generated username candidates on top sites, and finishes with an **identity graph**: usernames, names, emails, phones, addresses, wallets, accounts and profile URLs — all correlated in one table (or one `--html` page).
+`dossier` runs every relevant suite, scans generated username candidates on top sites, **permutates email addresses** (first+last → `j.dupont@`, `jd@`… tested against leak sources — a hit proves the address exists), cross-checks avatar hashes between profiles and Gravatar, and finishes with an **identity graph**: usernames, names, emails, phones, addresses, wallets, accounts and profile URLs — all correlated in one table (or one `--html` page).
 
 ## Optional free API key
 
@@ -132,7 +132,7 @@ INTELX_KEY=your-free-key   # get one at https://free.intelx.io
 
 ## The site database
 
-The bundled `sites.json` merges **Maigret** (6 121), **WhatsMyName** (717) and **Sherlock** (482), deduplicated by host+path into 6 406 entries — including generic engine support (Discourse, XenForo, MediaWiki, Mastodon, Lemmy, Gitea, phpBB…).
+The bundled `sites.json` merges **Maigret** (6 121), **Social-Analyzer** (999), **WhatsMyName** (717), **Sherlock** (482) and **Nexfil** (328), deduplicated by host+path into 6 817 entries — including generic engine support (Discourse, XenForo, MediaWiki, Mastodon, Lemmy, Gitea, phpBB…).
 
 ```bash
 python -m theeye sites --stats        # database overview
@@ -158,13 +158,13 @@ python -m theeye report <id> --format html -o out # re-export a past scan
 
 - [ ] Web UI
 - [ ] Site-health-aware ranking (auto-deprioritize FP-prone sites in `--top`)
-- [x] Username scan across 6 400+ sites with FP verification
+- [x] Username scan across 6 800+ sites with FP verification
 - [x] Email, breach, domain, IP, phone, address, crypto modules
 - [x] `dossier` cross-module identity graph
 
 ## Credits
 
-Site data aggregated from [Maigret](https://github.com/soxoj/maigret), [WhatsMyName](https://github.com/WebBreacher/WhatsMyName) and [Sherlock](https://github.com/sherlock-project/sherlock). Intelligence from free public services: Gravatar, LeakCheck, XposedOrNot, ProxyNova, HudsonRock, crt.sh, urlscan.io, Wayback Machine, Shodan InternetDB, ipapi.is, Nominatim, BAN, mempool.space, Ethplorer, BlockCypher and Intelligence X.
+Site data aggregated from [Maigret](https://github.com/soxoj/maigret), [WhatsMyName](https://github.com/WebBreacher/WhatsMyName), [Sherlock](https://github.com/sherlock-project/sherlock), [Social-Analyzer](https://github.com/qeeqbox/social-analyzer), [Nexfil](https://github.com/thewhiteh4t/nexfil) and [Blackbird](https://github.com/p1ngul1n0/blackbird). Intelligence from free public services: Gravatar, LeakCheck, XposedOrNot, ProxyNova, HudsonRock, crt.sh, urlscan.io, Wayback Machine, Shodan InternetDB, ipapi.is, Nominatim, BAN, mempool.space, Ethplorer, BlockCypher and Intelligence X.
 
 ## License
 

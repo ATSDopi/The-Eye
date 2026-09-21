@@ -25,12 +25,14 @@ def _judge(site: Site, status: int, body: str, final_url: str, username: str) ->
     body_l = body.lower()
 
     for needle in site.absence_strs:
-        if needle and needle.lower() in body_l:
-            return Status.NOT_FOUND, "high", f"absence string: {needle[:60]!r}"
+        n = needle.replace("{username}", username)
+        if n and n.lower() in body_l:
+            return Status.NOT_FOUND, "high", f"absence string: {n[:60]!r}"
 
     for needle in site.presence_strs:
-        if needle and needle.lower() in body_l:
-            return Status.FOUND, "high", f"presence string: {needle[:60]!r}"
+        n = needle.replace("{username}", username)
+        if n and n.lower() in body_l:
+            return Status.FOUND, "high", f"presence string: {n[:60]!r}"
 
     if site.check_type == "response_url" or site.error_url:
         err = (site.error_url or "").replace("{username}", username)
@@ -67,6 +69,7 @@ class Scanner:
         retries: int = 1,
     ):
         self.sem = asyncio.Semaphore(concurrency)
+        self._host_sems: dict[str, asyncio.Semaphore] = {}
         self.timeout = timeout
         self.retries = retries
         self.client = httpx.AsyncClient(
@@ -80,6 +83,16 @@ class Scanner:
 
     async def close(self):
         await self.client.aclose()
+
+    def _host_sem(self, url: str) -> asyncio.Semaphore:
+        """Per-host concurrency cap (6) — global semaphore alone hammers one
+        domain with 100 parallel requests and collects 429s."""
+        from urllib.parse import urlparse
+        host = urlparse(url).netloc
+        sem = self._host_sems.get(host)
+        if sem is None:
+            sem = self._host_sems[host] = asyncio.Semaphore(6)
+        return sem
 
     async def check(self, site: Site, username: str, query: str | None = None) -> SiteResult:
         q = query or username
@@ -106,7 +119,7 @@ class Scanner:
 
         t0 = time.monotonic()
         try:
-            async with self.sem:
+            async with self.sem, self._host_sem(url):
                 resp = await self._request(method, url, headers, payload)
         except Exception as e:  # network error, dns, ssl, timeout...
             return SiteResult(**base, status=Status.UNKNOWN,

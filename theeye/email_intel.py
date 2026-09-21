@@ -353,6 +353,66 @@ async def check_spotify(client: httpx.AsyncClient, email: str) -> SiteResult:
     return _r("spotify", Status.UNKNOWN, f"status {js.get('status')}")
 
 
+_EMAIL_SITES_PATH = Path(__file__).parent / "data" / "email_sites.json"
+
+
+def _email_sites() -> list[dict]:
+    try:
+        return json.loads(_EMAIL_SITES_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+
+
+async def check_registration(client: httpx.AsyncClient, email: str) -> SiteResult:
+    """Generic email->account registration checks (blackbird dataset)."""
+    sites = _email_sites()
+    if not sites:
+        return _r("registration", Status.UNKNOWN, "no email_sites.json — run `update`")
+    found, checked = [], 0
+
+    async def one(e: dict):
+        nonlocal checked
+        op = e.get("input_operation")
+        if op == "hash-sha256":
+            val = hashlib.sha256(email.encode()).hexdigest()
+        elif op == "hash-md5":
+            val = hashlib.md5(email.encode()).hexdigest()
+        else:
+            val = email
+        url = e["uri_check"].replace("{email}", val)
+        try:
+            if (e.get("method") or "GET") == "POST":
+                resp = await client.post(url, headers={**UA, **(e.get("headers") or {})}, timeout=12)
+            else:
+                resp = await client.get(url, headers={**UA, **(e.get("headers") or {})}, timeout=12)
+        except Exception:
+            return
+        checked += 1
+        body = resp.text
+        if e.get("m_string") and e["m_string"] in body:
+            return
+        if e.get("m_code") is not None and resp.status_code == e["m_code"]:
+            return
+        hit = True
+        if e.get("e_code") is not None and resp.status_code != e["e_code"]:
+            hit = False
+        if e.get("e_string") and e["e_string"] not in body:
+            hit = False
+        if not e.get("e_code") and not e.get("e_string"):
+            hit = False                       # no detection rule at all
+        if hit:
+            found.append(e["name"])
+
+    await asyncio.gather(*(one(e) for e in sites))
+    if not found:
+        return _r("registration", Status.NOT_FOUND,
+                  f"not registered on {checked} checked service(s)",
+                  {"checked": checked})
+    return _r("registration", Status.FOUND,
+              f"registered on: {', '.join(sorted(found))}",
+              {"services": sorted(found), "checked": checked})
+
+
 async def check_intelx(client: httpx.AsyncClient, email: str) -> SiteResult:
     from .intelx import intelx_search
     from .config import intelx_key
@@ -455,6 +515,7 @@ MODULES = [
     ("protonmail", check_protonmail),
     ("github", check_github),
     ("gh_commits", check_gh_commits),
+    ("registration", check_registration),
     ("twitter", check_twitter),
     ("spotify", check_spotify),
     ("leakcheck", check_leakcheck),

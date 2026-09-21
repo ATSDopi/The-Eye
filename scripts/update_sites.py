@@ -45,6 +45,10 @@ SOURCES = {
     "maigret": "https://raw.githubusercontent.com/soxoj/maigret/main/maigret/resources/data.json",
     "wmn": "https://raw.githubusercontent.com/WebBreacher/WhatsMyName/main/wmn-data.json",
     "sherlock": "https://raw.githubusercontent.com/sherlock-project/sherlock/master/sherlock_project/resources/data.json",
+    "nexfil": "https://raw.githubusercontent.com/thewhiteh4t/nexfil/master/src/nexfil/url_store.json",
+    "social_analyzer": "https://raw.githubusercontent.com/qeeqbox/social-analyzer/main/data/sites.json",
+    # email->registration checks (blackbird) — saved to email_sites.json
+    "blackbird_email": "https://raw.githubusercontent.com/p1ngul1n0/blackbird/main/data/email-data.json",
 }
 
 NSFW_TAGS = {
@@ -217,6 +221,86 @@ def norm_sherlock(raw: dict) -> list[dict]:
     return out
 
 
+def norm_nexfil(raw: list) -> list[dict]:
+    out = []
+    for e in raw:
+        url = (e.get("url") or "").replace("{}", "{username}")
+        if "{username}" not in url:
+            continue
+        test = e.get("test")
+        absence = [e["data"]] if test == "string" and isinstance(
+            e.get("data"), str) else []
+        out.append({
+            "name": host_of(url).rsplit(".", 1)[0] or url,
+            "url": url,
+            "url_probe": None, "url_main": None,
+            "check_type": "message" if absence else "status_code",
+            "presence_strs": [], "absence_strs": absence,
+            "error_url": None, "regex_check": None,
+            "head_only": False, "ignore_403": False, "method": "GET",
+            "headers": {}, "tags": [], "nsfw": False, "rank": None,
+            # "headless"/"xpath" checks need a browser engine — skip them
+            "disabled": test in ("headless", "xpath") or
+                        isinstance(e.get("data"), dict),
+            "protection": [],
+            "source": ["nexfil"],
+            "known_claimed": None, "known_unclaimed": None,
+        })
+    return out
+
+
+def norm_social_analyzer(raw: dict) -> list[dict]:
+    out = []
+    for e in raw.get("websites_entries", []):
+        url = e.get("url") or ""
+        if "{username}" not in url:
+            continue
+        presence, absence = [], []
+        for d in e.get("detections") or []:
+            s = d.get("string")
+            if not s or d.get("type") == "shared":
+                continue                     # shared engines not materializable
+            (presence if d.get("return") == "true" else absence).append(s)
+        cat = (e.get("type") or "").split(">")[-1].strip().lower()
+        tags = [t for t in (cat, (e.get("country") or "").lower()) if t]
+        out.append({
+            "name": host_of(url).rsplit(".", 1)[0].title() or url,
+            "url": url,
+            "url_probe": None, "url_main": None,
+            "check_type": "message" if (presence or absence) else "status_code",
+            "presence_strs": presence, "absence_strs": absence,
+            "error_url": None, "regex_check": None,
+            "head_only": False, "ignore_403": False, "method": "GET",
+            "headers": {}, "tags": tags,
+            "nsfw": str(e.get("nsfw")).lower() == "true" or is_nsfw(tags),
+            "rank": e.get("global_rank") or None,
+            "disabled": False, "protection": [],
+            "source": ["social_analyzer"],
+            "known_claimed": None, "known_unclaimed": None,
+        })
+    return out
+
+
+def norm_blackbird_email(raw: dict) -> list[dict]:
+    """email->site registration checks -> separate data/email_sites.json."""
+    out = []
+    for s in raw.get("sites", []):
+        uri = (s.get("uri_check") or "").replace("{account}", "{email}")
+        if "{email}" not in uri:
+            continue
+        out.append({
+            "name": s.get("name") or host_of(uri),
+            "uri_check": uri,
+            "method": (s.get("method") or "GET").upper(),
+            "headers": s.get("headers") or {},
+            "e_code": s.get("e_code"), "e_string": s.get("e_string"),
+            "m_code": s.get("m_code"), "m_string": s.get("m_string"),
+            "cat": s.get("cat"),
+            "input_operation": s.get("input_operation"),
+        })
+    return out
+
+
 def merge(lists: list[list[dict]]) -> list[dict]:
     by_key: dict[str, dict] = {}
     by_name: dict[str, str] = {}  # lowercase name -> dedup key
@@ -251,10 +335,18 @@ def main() -> None:
     for label, url in SOURCES.items():
         raws[label] = fetch(url, TMP / f"{label}.json")
 
+    # email->registration dataset lives in its own file
+    esites = norm_blackbird_email(raws["blackbird_email"])
+    (OUT.parent / "email_sites.json").write_text(json.dumps(
+        esites, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"  email registration sites: {len(esites)}")
+
     merged = merge([
         norm_maigret(raws["maigret"]),
         norm_wmn(raws["wmn"]),
         norm_sherlock(raws["sherlock"]),
+        norm_nexfil(raws["nexfil"]),
+        norm_social_analyzer(raws["social_analyzer"]),
     ])
 
     enabled = [s for s in merged if not s["disabled"]]

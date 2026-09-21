@@ -52,8 +52,9 @@ def _pivots(soup: BeautifulSoup, own_host: str = "") -> tuple[list[str], list[st
                 seg = [p for p in urlparse(h).path.split("/") if p]
                 is_pivot = host in PIVOT_DOMAINS or any(
                     host.endswith("." + d) for d in PIVOT_DOMAINS)
-                # profile-ish only: a handle in the path, not site navigation
-                if (is_pivot and seg and seg[0].lower() not in NON_PROFILE
+                # profile-ish only: /handle or /in|u|user/handle — not navigation
+                if (is_pivot and seg and len(seg) <= 2
+                        and seg[0].lower() not in NON_PROFILE
                         and host != own_host):
                     links.add(h.split("?")[0].split("#")[0].rstrip("/"))
             except Exception:

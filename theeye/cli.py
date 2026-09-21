@@ -427,8 +427,9 @@ def _fill_table(t: Table, rows: list[SiteResult]):
         enr = r.enriched or {}
         bits = [enr.get("og_title") or enr.get("ld_name") or "",
                 enr.get("description") or "", enr.get("followers") or ""]
-        name = (f"[green]{r.site}[/green]" if r.verified != "fp"
-                else f"[dim]{r.site}[/dim]")
+        site_name = r.site.replace("{username}", r.query or "")
+        name = (f"[green]{site_name}[/green]" if r.verified != "fp"
+                else f"[dim]{site_name}[/dim]")
         t.add_row(name, _link(r.url or ""), _ver_badge(r),
                   f"[{CONF_STYLE[r.confidence]}]{r.confidence}[/]",
                   r.query, ",".join(r.tags[:3]),
@@ -452,13 +453,12 @@ def print_results(report: ScanReport, show_all: bool = False):
 
     t = Table(title=f"Found — {report.username}", title_justify="left",
               border_style="red", header_style="bold")
-    t.add_column("Site", style="bold", no_wrap=True)
-    t.add_column("URL", no_wrap=True, max_width=60)
-    t.add_column("Ver")
-    t.add_column("Conf")
-    t.add_column("Query", style="dim")
-    t.add_column("Tags", style="dim")
-    t.add_column("Extracted", style="dim", max_width=50, overflow="fold")
+    t.add_column("Site", style="bold", no_wrap=True, max_width=22)
+    t.add_column("URL", no_wrap=True, max_width=48)
+    t.add_column("Ver", no_wrap=True)
+    t.add_column("Conf", no_wrap=True)
+    t.add_column("Query", style="dim", no_wrap=True, max_width=14)
+    t.add_column("Extracted", style="dim", max_width=30, overflow="fold")
     _fill_table(t, real)
     console.print(t)
 
@@ -467,13 +467,13 @@ def print_results(report: ScanReport, show_all: bool = False):
                          "'found' even for usernames that don't exist",
                    title_justify="left", border_style="grey23",
                    header_style="bold dim")
-        ft.add_column("Site", no_wrap=True)
-        ft.add_column("URL", no_wrap=True, max_width=55)
-        ft.add_column("Ver"); ft.add_column("Query", style="dim")
-        ft.add_column("Tags", style="dim")
+        ft.add_column("Site", no_wrap=True, max_width=22)
+        ft.add_column("URL", no_wrap=True, max_width=48)
+        ft.add_column("Ver", no_wrap=True)
+        ft.add_column("Query", style="dim", no_wrap=True, max_width=16)
         for r in fps:
-            ft.add_row(f"[dim]{r.site}[/dim]", _link(r.url or "", 55),
-                       _ver_badge(r), r.query, ",".join(r.tags[:3]))
+            ft.add_row(f"[dim]{r.site.replace('{username}', r.query or '')}[/dim]",
+                       _link(r.url or "", 46), _ver_badge(r), r.query)
         console.print(ft)
 
     # cross-account pivots harvested during enrichment
@@ -758,6 +758,31 @@ def _username_candidates(first: str, last: str, email: str | None,
     return out[:8]
 
 
+def _email_candidates(first: str, last: str,
+                      domains: list[str]) -> list[str]:
+    """j.dupont@, jdupont@, jd@… — candidates to test against breach DBs.
+    A leak hit on a generated address proves the mailbox exists."""
+    import unicodedata
+
+    def norm(s: str) -> str:
+        s = unicodedata.normalize("NFKD", s.lower())
+        return re.sub(r"[^a-z]", "", s.encode("ascii", "ignore").decode())
+
+    f, l = norm(first), norm(last)
+    if not f or not l:
+        return []
+    locals_ = [f"{f}.{l}", f + l, f"{f[0]}{l}", f"{f}{l[0]}",
+               f"{f}_{l}", f"{l}{f}", f"{l}.{f}", f]
+    out, seen = [], set()
+    for loc in locals_:
+        for d in domains:
+            e = f"{loc}@{d}"
+            if e not in seen:
+                seen.add(e)
+                out.append(e)
+    return out
+
+
 async def run_crypto(args) -> ScanReport:
     from .crypto_intel import run_crypto_scan
     console.print(Panel(f"[bold]{args.address}[/bold] — public explorers · "
@@ -960,6 +985,27 @@ async def run_dossier(args) -> int:
                            "aol.com", "mail.com"):
                 await run_domain(ns_for("domain", dom))
                 fields["domain"] = fields["domain"] or dom
+
+    # ---------- email permutation -> breach-existence proof ----------
+    if first and last:
+        domains = ([fields["domain"]] if fields["domain"] else []) + \
+                  ["gmail.com", "outlook.com", "proton.me"]
+        ecands = _email_candidates(first, last, domains)
+        console.print(f"[bold]email permutation:[/bold] {len(ecands)} candidates "
+                      f"× breach sources")
+        from .email_intel import run_email_scan as _rescan
+        import httpx as _hx
+        results = await asyncio.gather(*(
+            _rescan(e, args.timeout, args.proxy,
+                    only=["leakcheck", "xposedornot", "proxynova"])
+            for e in ecands))
+        for e, rep in zip(ecands, results):
+            hits = [r for r in rep if r.status == Status.FOUND]
+            if hits:
+                srcs = ", ".join(r.site for r in hits)
+                identity["emails"].add(f"{e}  ← in breach data ({srcs})")
+                console.print(f"  [green]✓[/green] {e} — found in breach "
+                              f"data via {srcs}")
 
     # ---------- phone ----------
     if fields["phone"]:
