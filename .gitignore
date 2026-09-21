@@ -5,4 +5,4 @@ __pycache__/
 theeye/data/site_health.json
 theeye/data/disposable.txt
 .tmp/
-AGENT.md
+AGENTS.md
